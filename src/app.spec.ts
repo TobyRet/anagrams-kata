@@ -7,7 +7,7 @@ describe('GET /*', () => {
   let server: http.Server;
 
   beforeAll(() => {
-    server = startServer(app, 8080)
+    server = startServer()
   });
 
   afterAll((done) => {
@@ -23,10 +23,10 @@ describe('GET /*', () => {
   })
 
   it('should return 200 and no anagrams if they do not exist', async () => {
-    const response = await request(app).get('/zzz')
+    const response = await request(app).get('/trr')
 
     expect(response.status).toBe(200)
     expect(response.headers["content-type"]).toMatch(/json/);
-    expect(response.body).toEqual(['zzz'])
+    expect(response.body).toEqual([])
   })
 })

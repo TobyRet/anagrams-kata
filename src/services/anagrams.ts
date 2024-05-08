@@ -1,20 +1,20 @@
 import fs from 'fs';
-import * as readline from 'node:readline/promises';
+
+let memoizedAnagramsList: string[] | null = null;
 
 export const anagrams = async (words: string) => {
+  if(!memoizedAnagramsList) {
+    const data = await fs.promises.readFile('./src/lib/wordlist.txt', 'utf-8');
+    memoizedAnagramsList = data.split('\n');
+  }
+
   const wordChars = words.split('');
-
-  const fileStream = fs.createReadStream('./src/lib/wordlist.txt');
-  const rl = readline.createInterface({
-    input: fileStream,
-    crlfDelay: Infinity,
-  });
-
   const anagrams = []
 
   try {
-    for await (const line of rl) {
+    for await (const line of memoizedAnagramsList) {
       const lineChars = line.split('');
+
       if (lineChars.length === wordChars.length && lineChars.every((char) => wordChars.includes(char))) {
         anagrams.push(line);
       }
